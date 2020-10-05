@@ -7,3 +7,5 @@
 
 ## Specifications:
 
+## TODO
+- [ ] OpenCV problem
