@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from gaussian import gaussian_blur
-from sobel_edge_detector import sobel_edge_detection
+from sobel import sobel_edge_detection
 
 
 def non_max_suppression(gradient_magnitude, gradient_direction, verbose):
