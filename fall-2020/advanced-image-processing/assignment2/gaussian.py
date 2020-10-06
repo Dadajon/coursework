@@ -9,10 +9,11 @@ import numpy as np
 from convolution import convolution
 
 
+# calculate the density using the formula of Univariate Normal Distribution.
 def dnorm(x, mu, sd):
     return 1 / (np.sqrt(2 * np.pi) * sd) * np.e ** (-np.power((x - mu) / sd, 2) / 2)
 
-
+# generate Gaussian Kernel
 def gaussian_kernel(size, sigma=1, verbose=False):
     kernel_1D = np.linspace(-(size // 2), size // 2, size)
     for i in range(size):

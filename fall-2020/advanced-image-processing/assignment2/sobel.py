@@ -9,40 +9,38 @@ from convolution import convolution
 from gaussian import gaussian_blur
 
 
-def sobel_edge_detection(image, filter, verbose=False):
-    new_image_x = convolution(image, filter, verbose)
+def sobel_edge_detection(image, filter):
+    image_x = convolution(image, filter)
 
-    if verbose:
-        plt.imshow(new_image_x, cmap='gray')
-        plt.title("Horizontal Edge")
-        plt.show()
+    # generate intermediate images
+    plt.imshow(image_x, cmap='gray')
+    plt.title("Horizontal Edge")
+    plt.show()
 
-    new_image_y = convolution(image, np.flip(filter.T, axis=0), verbose)
-
-    if verbose:
-        plt.imshow(new_image_y, cmap='gray')
-        plt.title("Vertical Edge")
-        plt.show()
-
-    gradient_magnitude = np.sqrt(np.square(new_image_x) + np.square(new_image_y))
-
-    gradient_magnitude *= 255.0 / gradient_magnitude.max()
-
-    if verbose:
-        plt.imshow(gradient_magnitude, cmap='gray')
-        plt.title("Gradient Magnitude")
-        plt.show()
-
-    return gradient_magnitude
+    image_y = convolution(image, filter.T)
 
 
-if __name__ == '__main__':
-    filter = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
+    plt.imshow(image_y, cmap='gray')
+    plt.title("Vertical Edge")
+    plt.show()
+    
+    # calculate gradiednt magnitude
+    # np.hypot() = sqrt(img_x**2 + img_2**2) -> hypotenuse
+    G = np.hypot(image_x, image_y)
 
-    ap = argparse.ArgumentParser()
-    ap.add_argument("-i", "--image", required=True, help="Path to the image")
-    args = vars(ap.parse_args())
+    G *= 255.0 / G.max()
 
-    image = np.array(Image.open(args["image"]))
-    image = gaussian_blur(image, 9, verbose=True)
-    sobel_edge_detection(image, filter, verbose=True)
+
+    plt.imshow(G, cmap='gray')
+    plt.title("Gradient Magnitude")
+    plt.show()
+        
+    # calculate gradient angle
+    G_theta = np.arctan2(image_y, image_x)
+
+    if convert_to_degree:
+        G_theta = np.rad2deg(gradient_direction)
+        G_theta += 180
+
+    return G, G_theta
+

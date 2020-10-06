@@ -9,7 +9,7 @@ from gaussian import gaussian_blur
 from sobel import sobel_edge_detection
 
 
-def non_max_suppression(gradient_magnitude, gradient_direction, verbose):
+def non_max_suppression(gradient_magnitude, gradient_direction):
     image_row, image_col = gradient_magnitude.shape
 
     output = np.zeros(gradient_magnitude.shape)
@@ -144,14 +144,14 @@ if __name__ == '__main__':
 
     image = cv2.imread(args["image"])
 
-    blurred_image = gaussian_blur(image, kernel_size=9, verbose=False)
+    blurred_image = gaussian_blur(image, kernel_size=1, verbose=False)
 
     edge_filter = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
 
-    gradient_magnitude, gradient_direction = sobel_edge_detection(blurred_image, edge_filter, convert_to_degree=True,
+    G, G_theta = sobel_edge_detection(blurred_image, edge_filter, convert_to_degree=True,
                                                                   verbose=args["verbose"])
 
-    new_image = non_max_suppression(gradient_magnitude, gradient_direction, verbose=args["verbose"])
+    new_image = non_max_suppression(G, G_theta, verbose=args["verbose"])
 
     weak = 50
 
