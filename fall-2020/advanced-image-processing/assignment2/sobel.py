@@ -1,7 +1,7 @@
 # Created by dadajonjurakuziev at 2020/10/06 2:46 AM
 import argparse
 
-import cv2
+from PIL import Image
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -43,6 +43,6 @@ if __name__ == '__main__':
     ap.add_argument("-i", "--image", required=True, help="Path to the image")
     args = vars(ap.parse_args())
 
-    image = cv2.imread(args["image"])
+    image = np.array(Image.open(args["image"]))
     image = gaussian_blur(image, 9, verbose=True)
     sobel_edge_detection(image, filter, verbose=True)

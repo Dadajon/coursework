@@ -1,5 +1,5 @@
 # Created by dadajonjurakuziev at 2020/10/06 2:33 AM
-import cv2
+from PIL import Image
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -7,7 +7,7 @@ import numpy as np
 def convolution(image, kernel, average=False, verbose=False):
     if len(image.shape) == 3:
         print("Found 3 Channels : {}".format(image.shape))
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        image = np.array(Image.open(image).convert(mode='L'))
         print("Converted to Gray Channel. Size : {}".format(image.shape))
     else:
         print("Image Shape : {}".format(image.shape))
