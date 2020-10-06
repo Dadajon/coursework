@@ -32,7 +32,7 @@ img.save('greyscale.png')
 
 ### Conclusions
 
-1. ```Python cv2.filter2D() ``` is just `convolution function`
-2. ```Python cv2.imread() -> cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) ``` can be replaced by ```Python np.array(Image.open(IMG_PATH).convert(mode='L')) ```
+1. `cv2.filter2D()` is just `convolution function`
+2. `cv2.imread() -> cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)` can be replaced by `np.array(Image.open(IMG_PATH).convert(mode='L'))`
 
 ### Due date : October 6, 2020 
