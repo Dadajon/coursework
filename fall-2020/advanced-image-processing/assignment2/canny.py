@@ -1,11 +1,8 @@
 # Created by dadajonjurakuziev at 2020/10/06 2:48 AM
-import argparse
 
-import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 
-from gaussian import gaussian_blur
 from sobel import sobel_edge_detection
 
 
@@ -39,15 +36,14 @@ def non_max_suppression(gradient_magnitude, gradient_direction):
             if gradient_magnitude[row, col] >= before_pixel and gradient_magnitude[row, col] >= after_pixel:
                 output[row, col] = gradient_magnitude[row, col]
 
-    if verbose:
-        plt.imshow(output, cmap='gray')
-        plt.title("Non Max Suppression")
-        plt.show()
+    plt.title("Non Max Suppression")
+    plt.imshow(output, cmap='gray')
+    plt.show()
 
     return output
 
 
-def threshold(image, low, high, weak, verbose=False):
+def threshold(image, low, high, weak):
     output = np.zeros(image.shape)
 
     strong = 255
@@ -58,10 +54,9 @@ def threshold(image, low, high, weak, verbose=False):
     output[strong_row, strong_col] = strong
     output[weak_row, weak_col] = weak
 
-    if verbose:
-        plt.imshow(output, cmap='gray')
-        plt.title("threshold")
-        plt.show()
+    plt.title("threshold")
+    plt.imshow(output, cmap='gray')
+    plt.show()
 
     return output
 
@@ -74,12 +69,14 @@ def hysteresis(image, weak):
     for row in range(1, image_row):
         for col in range(1, image_col):
             if top_to_bottom[row, col] == weak:
-                if top_to_bottom[row, col + 1] == 255 or top_to_bottom[row, col - 1] == 255 or top_to_bottom[
-                    row - 1, col] == 255 or top_to_bottom[
-                    row + 1, col] == 255 or top_to_bottom[
-                    row - 1, col - 1] == 255 or top_to_bottom[row + 1, col - 1] == 255 or top_to_bottom[
-                    row - 1, col + 1] == 255 or top_to_bottom[
-                    row + 1, col + 1] == 255:
+                if top_to_bottom[row, col + 1] == 255 \
+                        or top_to_bottom[row, col - 1] == 255 \
+                        or top_to_bottom[row - 1, col] == 255 \
+                        or top_to_bottom[row + 1, col] == 255 \
+                        or top_to_bottom[row - 1, col - 1] == 255 \
+                        or top_to_bottom[row + 1, col - 1] == 255 \
+                        or top_to_bottom[row - 1, col + 1] == 255 \
+                        or top_to_bottom[row + 1, col + 1] == 255:
                     top_to_bottom[row, col] = 255
                 else:
                     top_to_bottom[row, col] = 0
@@ -89,12 +86,14 @@ def hysteresis(image, weak):
     for row in range(image_row - 1, 0, -1):
         for col in range(image_col - 1, 0, -1):
             if bottom_to_top[row, col] == weak:
-                if bottom_to_top[row, col + 1] == 255 or bottom_to_top[row, col - 1] == 255 or bottom_to_top[
-                    row - 1, col] == 255 or bottom_to_top[
-                    row + 1, col] == 255 or bottom_to_top[
-                    row - 1, col - 1] == 255 or bottom_to_top[row + 1, col - 1] == 255 or bottom_to_top[
-                    row - 1, col + 1] == 255 or bottom_to_top[
-                    row + 1, col + 1] == 255:
+                if bottom_to_top[row, col + 1] == 255 \
+                        or bottom_to_top[row, col - 1] == 255 \
+                        or bottom_to_top[row - 1, col] == 255 \
+                        or bottom_to_top[row + 1, col] == 255 \
+                        or bottom_to_top[row - 1, col - 1] == 255 \
+                        or bottom_to_top[row + 1, col - 1] == 255 \
+                        or bottom_to_top[row - 1, col + 1] == 255 \
+                        or bottom_to_top[row + 1, col + 1] == 255:
                     bottom_to_top[row, col] = 255
                 else:
                     bottom_to_top[row, col] = 0
@@ -104,12 +103,14 @@ def hysteresis(image, weak):
     for row in range(1, image_row):
         for col in range(image_col - 1, 0, -1):
             if right_to_left[row, col] == weak:
-                if right_to_left[row, col + 1] == 255 or right_to_left[row, col - 1] == 255 or right_to_left[
-                    row - 1, col] == 255 or right_to_left[
-                    row + 1, col] == 255 or right_to_left[
-                    row - 1, col - 1] == 255 or right_to_left[row + 1, col - 1] == 255 or right_to_left[
-                    row - 1, col + 1] == 255 or right_to_left[
-                    row + 1, col + 1] == 255:
+                if right_to_left[row, col + 1] == 255 \
+                        or right_to_left[row, col - 1] == 255 \
+                        or right_to_left[row - 1, col] == 255 \
+                        or right_to_left[row + 1, col] == 255 \
+                        or right_to_left[row - 1, col - 1] == 255 \
+                        or right_to_left[row + 1, col - 1] == 255 \
+                        or right_to_left[row - 1, col + 1] == 255 \
+                        or right_to_left[row + 1, col + 1] == 255:
                     right_to_left[row, col] = 255
                 else:
                     right_to_left[row, col] = 0
@@ -119,12 +120,14 @@ def hysteresis(image, weak):
     for row in range(image_row - 1, 0, -1):
         for col in range(1, image_col):
             if left_to_right[row, col] == weak:
-                if left_to_right[row, col + 1] == 255 or left_to_right[row, col - 1] == 255 or left_to_right[
-                    row - 1, col] == 255 or left_to_right[
-                    row + 1, col] == 255 or left_to_right[
-                    row - 1, col - 1] == 255 or left_to_right[row + 1, col - 1] == 255 or left_to_right[
-                    row - 1, col + 1] == 255 or left_to_right[
-                    row + 1, col + 1] == 255:
+                if left_to_right[row, col + 1] == 255 \
+                        or left_to_right[row, col - 1] == 255 \
+                        or left_to_right[row - 1, col] == 255 \
+                        or left_to_right[row + 1, col] == 255 \
+                        or left_to_right[row - 1, col - 1] == 255 \
+                        or left_to_right[row + 1, col - 1] == 255 \
+                        or left_to_right[row - 1, col + 1] == 255 \
+                        or left_to_right[row + 1, col + 1] == 255:
                     left_to_right[row, col] = 255
                 else:
                     left_to_right[row, col] = 0
@@ -136,29 +139,13 @@ def hysteresis(image, weak):
     return final_image
 
 
-if __name__ == '__main__':
-    ap = argparse.ArgumentParser()
-    ap.add_argument("-i", "--image", required=True, help="Path to the image")
-    ap.add_argument("-v", "--verbose", type=bool, default=False, help="Path to the image")
-    args = vars(ap.parse_args())
+def canny_edge_detection(image):
+    _, _, G, G_theta = sobel_edge_detection(image, convert_to_degree=True, verbose=False)
+    nms_image = non_max_suppression(G, G_theta)
+    threshold_image = threshold(nms_image, 50, 80, weak=400)
+    new_image = hysteresis(threshold_image, 400)
 
-    image = cv2.imread(args["image"])
-
-    blurred_image = gaussian_blur(image, kernel_size=1, verbose=False)
-
-    edge_filter = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
-
-    G, G_theta = sobel_edge_detection(blurred_image, edge_filter, convert_to_degree=True,
-                                                                  verbose=args["verbose"])
-
-    new_image = non_max_suppression(G, G_theta, verbose=args["verbose"])
-
-    weak = 50
-
-    new_image = threshold(new_image, 5, 20, weak=weak, verbose=args["verbose"])
-
-    new_image = hysteresis(new_image, weak)
-
-    plt.imshow(new_image, cmap='gray')
     plt.title("Canny Edge Detector")
+    plt.imshow(new_image, cmap='gray')
     plt.show()
+    return nms_image, threshold_image, new_image

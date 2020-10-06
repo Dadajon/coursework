@@ -1,17 +1,14 @@
 # Created by dadajonjurakuziev at 2020/10/06 2:33 AM
-import argparse
-import math
-
-from PIL import Image
 import matplotlib.pyplot as plt
 import numpy as np
 
 from convolution import convolution
 
 
-# calculate the density using the formula of Univariate Normal Distribution.
+# calculate the density using the formula of normal distribution.
 def dnorm(x, mu, sd):
     return 1 / (np.sqrt(2 * np.pi) * sd) * np.e ** (-np.power((x - mu) / sd, 2) / 2)
+
 
 # generate Gaussian Kernel
 def gaussian_kernel(size, sigma=1, verbose=False):
@@ -23,13 +20,13 @@ def gaussian_kernel(size, sigma=1, verbose=False):
     kernel_2D *= 1.0 / kernel_2D.max()
 
     if verbose:
-        plt.imshow(kernel_2D, interpolation='none', cmap='gray')
-        plt.title("Kernel ( {}X{} )".format(size, size))
+        plt.title("Gaussian kernel ( {}X{} )".format(size, size))
+        plt.imshow(kernel_2D, cmap='gray')
         plt.show()
 
     return kernel_2D
 
 
 def gaussian_blur(image, kernel_size, verbose=False):
-    kernel = gaussian_kernel(kernel_size, sigma=math.sqrt(kernel_size), verbose=verbose)
+    kernel = gaussian_kernel(kernel_size, sigma=1, verbose=verbose)
     return convolution(image, kernel, average=True, verbose=verbose)
