@@ -2,17 +2,18 @@
 import argparse
 import math
 
-import cv2
+from PIL import Image
 import matplotlib.pyplot as plt
 import numpy as np
 
 from convolution import convolution
 
 
+# calculate the density using the formula of Univariate Normal Distribution.
 def dnorm(x, mu, sd):
     return 1 / (np.sqrt(2 * np.pi) * sd) * np.e ** (-np.power((x - mu) / sd, 2) / 2)
 
-
+# generate Gaussian Kernel
 def gaussian_kernel(size, sigma=1, verbose=False):
     kernel_1D = np.linspace(-(size // 2), size // 2, size)
     for i in range(size):
@@ -32,13 +33,3 @@ def gaussian_kernel(size, sigma=1, verbose=False):
 def gaussian_blur(image, kernel_size, verbose=False):
     kernel = gaussian_kernel(kernel_size, sigma=math.sqrt(kernel_size), verbose=verbose)
     return convolution(image, kernel, average=True, verbose=verbose)
-
-
-if __name__ == '__main__':
-    ap = argparse.ArgumentParser()
-    ap.add_argument("-i", "--image", required=True, help="Path to the image")
-    args = vars(ap.parse_args())
-
-    image = cv2.imread(args["image"])
-
-    gaussian_blur(image, 5, verbose=True)
