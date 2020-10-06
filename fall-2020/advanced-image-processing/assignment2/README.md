@@ -16,10 +16,10 @@ img = Image.open('image.png').convert('LA')
 img.save('greyscale.png')
 ```
 
-- [ ] Test all code
-- [ ] Modify variable names
-- [ ] Add comments
-- [ ] Generate images
+- [x] Test all code
+- [x] Modify variable names
+- [x] Add comments
+- [x] Generate images
 - [ ] Try new images from Berkeley dataset
 - [ ] Analise the results
 - [ ] Prepare report 
