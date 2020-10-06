@@ -1,8 +1,4 @@
 # Created by dadajonjurakuziev at 2020/10/06 2:33 AM
-<<<<<<< HEAD
-import cv2
-=======
->>>>>>> refs/remotes/origin/master
 from PIL import Image
 import matplotlib.pyplot as plt
 import numpy as np
