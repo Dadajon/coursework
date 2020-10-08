@@ -1,6 +1,5 @@
 # Created by dadajonjurakuziev at 2020/10/06 2:48 AM
 
-import matplotlib.pyplot as plt
 import numpy as np
 
 from sobel import sobel_edge_detection
@@ -36,10 +35,6 @@ def non_max_suppression(gradient_magnitude, gradient_direction):
             if gradient_magnitude[row, col] >= before_pixel and gradient_magnitude[row, col] >= after_pixel:
                 output[row, col] = gradient_magnitude[row, col]
 
-    plt.title("Non Max Suppression")
-    plt.imshow(output, cmap='gray')
-    plt.show()
-
     return output
 
 
@@ -53,10 +48,6 @@ def threshold(image, low, high, weak):
 
     output[strong_row, strong_col] = strong
     output[weak_row, weak_col] = weak
-
-    plt.title("threshold")
-    plt.imshow(output, cmap='gray')
-    plt.show()
 
     return output
 
@@ -140,12 +131,9 @@ def hysteresis(image, weak):
 
 
 def canny_edge_detection(image):
-    _, _, G, G_theta = sobel_edge_detection(image, convert_to_degree=True, verbose=False)
-    nms_image = non_max_suppression(G, G_theta)
-    threshold_image = threshold(nms_image, 50, 80, weak=400)
-    new_image = hysteresis(threshold_image, 400)
+    _, _, G, G_theta = sobel_edge_detection(image, convert_to_degree=True)
+    nms_img = non_max_suppression(G, G_theta)
+    threshold_img = threshold(nms_img, 50, 80, weak=400)
+    canny_img = hysteresis(threshold_img, 400)
 
-    plt.title("Canny Edge Detector")
-    plt.imshow(new_image, cmap='gray')
-    plt.show()
-    return nms_image, threshold_image, new_image
+    return nms_img, threshold_img, canny_img

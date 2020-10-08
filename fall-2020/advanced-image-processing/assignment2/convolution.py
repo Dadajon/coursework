@@ -33,8 +33,7 @@ def convolution(image, kernel, average=False, verbose=False):
     # convolution operation
     for row in range(image_row):
         for col in range(image_col):
-            output[row, col] = np.sum(
-                kernel * padded_image[row:row + kernel_row, col:col + kernel_col])
+            output[row, col] = np.sum(kernel * padded_image[row:row + kernel_row, col:col + kernel_col])
 
             # apply the smooth/blur effect
             if average:

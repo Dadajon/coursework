@@ -4,7 +4,7 @@ import numpy as np
 from convolution import convolution
 
 
-def sobel_edge_detection(image, convert_to_degree=False, verbose=False):
+def sobel_edge_detection(image, convert_to_degree=False):
     vertical_filter = np.array([[-1, 0, 1],
                                 [-2, 0, 2],
                                 [-1, 0, 1]])
