@@ -11,7 +11,7 @@ def dnorm(x, mu, sd):
 
 
 # generate Gaussian Kernel
-def gaussian_kernel(size, sigma=1, verbose=False):
+def gaussian_kernel(size, sigma=1.4, verbose=False):
     kernel_1D = np.linspace(-(size // 2), size // 2, size)
     for i in range(size):
         kernel_1D[i] = dnorm(kernel_1D[i], 0, sigma)
@@ -27,6 +27,6 @@ def gaussian_kernel(size, sigma=1, verbose=False):
     return kernel_2D
 
 
-def gaussian_blur(image, kernel_size, verbose=False):
-    kernel = gaussian_kernel(kernel_size, sigma=np.sqrt(kernel_size), verbose=verbose)
+def gaussian_blur(image, kernel_size, sigma=1.4, verbose=False):
+    kernel = gaussian_kernel(kernel_size, sigma=sigma, verbose=verbose)
     return convolution(image, kernel, average=True, verbose=verbose)
