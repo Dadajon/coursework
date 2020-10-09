@@ -32,7 +32,7 @@ if __name__ == "__main__":
 
     # canny
     # 1D Gaussian mask
-    image_1D = gaussian_blur(image, kernel_size=1, sigma=float(args["sigma"]), verbose=False)
+    image_1D = gaussian_blur(image, kernel_size=9, sigma=float(args["sigma"]), verbose=False)
     nms, threshold, canny = canny_edge_detection(image_1D)
 
     # save results

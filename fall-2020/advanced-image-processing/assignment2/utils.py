@@ -9,13 +9,6 @@ def array2img(arr):
     return img
 
 
-def save_output(folder, sobel_x, sobel_y, sobel, prewitt_x, prewitt_y, prewitt, nms, thr, canny):
-    folder_name = folder
-    save_sobel(folder_name, sobel_x, sobel_y, sobel)
-    save_prewitt(folder, prewitt_x, prewitt_y, prewitt)
-    save_canny(folder, nms, thr, canny)
-
-
 def save_sobel(folder, sobel_x, sobel_y, sobel):
     folder_name = folder
 
@@ -47,3 +40,10 @@ def save_canny(folder, nms, thr, canny):
     thr.save("output/" + folder_name + "/thr.jpg")
     canny = array2img(canny)
     canny.save("output/" + folder_name + "/canny.jpg")
+
+    
+def save_output(folder, sobel_x, sobel_y, sobel, prewitt_x, prewitt_y, prewitt, nms, thr, canny):
+    folder_name = folder
+    save_sobel(folder_name, sobel_x, sobel_y, sobel)
+    save_prewitt(folder, prewitt_x, prewitt_y, prewitt)
+    save_canny(folder, nms, thr, canny)

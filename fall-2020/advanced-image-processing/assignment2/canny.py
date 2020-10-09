@@ -14,16 +14,15 @@ def non_max_suppression(gradient_magnitude, gradient_direction):
         for col in range(1, image_col - 1):
             direction = gradient_direction[row, col]
             # angle 0
-            if (0 <= direction < 22.5) or (337.5 <= direction < 360) \
-                    or (157.5 <= direction < 202.5):
+            if (0 <= direction < 22.5) or (337.5 <= direction < 360) :
                 before_pixel = gradient_magnitude[row, col - 1]
                 after_pixel = gradient_magnitude[row, col + 1]
             # angle 45
-            elif (22.5 <= direction < 67.5) or (202.5 <= direction < 247.5):
+            elif (22.5 <= direction < 67.5):
                 before_pixel = gradient_magnitude[row + 1, col - 1]
                 after_pixel = gradient_magnitude[row - 1, col + 1]
             # angle 90
-            elif (67.5 <= direction < 112.5) or (247.5 <= direction < 292.5):
+            elif (67.5 <= direction < 112.5):
                 before_pixel = gradient_magnitude[row - 1, col]
                 after_pixel = gradient_magnitude[row + 1, col]
             # angle 135
@@ -124,7 +123,7 @@ def hysteresis(image, weak):
 def canny_edge_detection(image):
     _, _, G, G_theta = sobel_edge_detection(image, convert_to_degree=True)
     nms_img = non_max_suppression(G, G_theta)
-    threshold_img = threshold(nms_img, 20, 45, weak=50)
+    threshold_img = threshold(nms_img, 5, 20, weak=50)
     canny_img = hysteresis(threshold_img, 50)
 
     return nms_img, threshold_img, canny_img
