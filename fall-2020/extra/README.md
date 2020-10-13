@@ -91,8 +91,7 @@
 학습률 최적화에 걸린 시간은 61.9초 입니다.
 
 ```
-<center>
+
 ![figure](https://drive.google.com/uc?export=view&id=1jseR__YVwxZkGQFHV8zC5CRLggnxnlnT)
-</center>
 
 
