@@ -1,11 +1,7 @@
 # Created by dadajonjurakuziev at 2020/10/06 2:48 AM
-import argparse
 
-import cv2
-import matplotlib.pyplot as plt
 import numpy as np
 
-from gaussian import gaussian_blur
 from sobel import sobel_edge_detection
 
 
@@ -14,24 +10,22 @@ def non_max_suppression(gradient_magnitude, gradient_direction):
 
     output = np.zeros(gradient_magnitude.shape)
 
-    PI = 180
-
     for row in range(1, image_row - 1):
         for col in range(1, image_col - 1):
             direction = gradient_direction[row, col]
-
-            if (0 <= direction < PI / 8) or (15 * PI / 8 <= direction <= 2 * PI):
+            # angle 0
+            if (0 <= direction < 22.5) or (337.5 <= direction < 360) :
                 before_pixel = gradient_magnitude[row, col - 1]
                 after_pixel = gradient_magnitude[row, col + 1]
-
-            elif (PI / 8 <= direction < 3 * PI / 8) or (9 * PI / 8 <= direction < 11 * PI / 8):
+            # angle 45
+            elif (22.5 <= direction < 67.5):
                 before_pixel = gradient_magnitude[row + 1, col - 1]
                 after_pixel = gradient_magnitude[row - 1, col + 1]
-
-            elif (3 * PI / 8 <= direction < 5 * PI / 8) or (11 * PI / 8 <= direction < 13 * PI / 8):
+            # angle 90
+            elif (67.5 <= direction < 112.5):
                 before_pixel = gradient_magnitude[row - 1, col]
                 after_pixel = gradient_magnitude[row + 1, col]
-
+            # angle 135
             else:
                 before_pixel = gradient_magnitude[row - 1, col - 1]
                 after_pixel = gradient_magnitude[row + 1, col + 1]
@@ -39,15 +33,10 @@ def non_max_suppression(gradient_magnitude, gradient_direction):
             if gradient_magnitude[row, col] >= before_pixel and gradient_magnitude[row, col] >= after_pixel:
                 output[row, col] = gradient_magnitude[row, col]
 
-    if verbose:
-        plt.imshow(output, cmap='gray')
-        plt.title("Non Max Suppression")
-        plt.show()
-
     return output
 
 
-def threshold(image, low, high, weak, verbose=False):
+def threshold(image, low, high, weak):
     output = np.zeros(image.shape)
 
     strong = 255
@@ -57,11 +46,6 @@ def threshold(image, low, high, weak, verbose=False):
 
     output[strong_row, strong_col] = strong
     output[weak_row, weak_col] = weak
-
-    if verbose:
-        plt.imshow(output, cmap='gray')
-        plt.title("threshold")
-        plt.show()
 
     return output
 
@@ -136,29 +120,10 @@ def hysteresis(image, weak):
     return final_image
 
 
-if __name__ == '__main__':
-    ap = argparse.ArgumentParser()
-    ap.add_argument("-i", "--image", required=True, help="Path to the image")
-    ap.add_argument("-v", "--verbose", type=bool, default=False, help="Path to the image")
-    args = vars(ap.parse_args())
+def canny_edge_detection(image):
+    _, _, G, G_theta = sobel_edge_detection(image, convert_to_degree=True)
+    nms_img = non_max_suppression(G, G_theta)
+    threshold_img = threshold(nms_img, 5, 20, weak=50)
+    canny_img = hysteresis(threshold_img, 50)
 
-    image = cv2.imread(args["image"])
-
-    blurred_image = gaussian_blur(image, kernel_size=1, verbose=False)
-
-    edge_filter = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
-
-    G, G_theta = sobel_edge_detection(blurred_image, edge_filter, convert_to_degree=True,
-                                                                  verbose=args["verbose"])
-
-    new_image = non_max_suppression(G, G_theta, verbose=args["verbose"])
-
-    weak = 50
-
-    new_image = threshold(new_image, 5, 20, weak=weak, verbose=args["verbose"])
-
-    new_image = hysteresis(new_image, weak)
-
-    plt.imshow(new_image, cmap='gray')
-    plt.title("Canny Edge Detector")
-    plt.show()
+    return nms_img, threshold_img, canny_img
