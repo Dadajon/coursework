@@ -1,21 +1,33 @@
-from skimage.color import rgb2gray
 from scipy.ndimage.filters import convolve
+from skimage.color import rgb2gray
 
+from DoG_pyramid import generate_DoG_pyramid
+from descriptors import get_local_descriptors
 from gaussian_filter import gaussian_filter
 from gaussian_pyramid import generate_gaussian_pyramid
-from DoG_pyramid import generate_DoG_pyramid
 from keypoints import get_keypoints
 from orientation import assign_orientation
-from descriptors import get_local_descriptors
+
 
 class SIFT(object):
     def __init__(self, im, s=3, num_octave=4, s0=1.3, sigma=1.6, r_th=10, t_c=0.03, w=16):
+        """
+
+        :param im: Input image
+        :param s: number images we want in each octave
+        :param num_octave: number of octaves
+        :param s0:
+        :param sigma:
+        :param r_th:
+        :param t_c:
+        :param w:
+        """
         self.im = convolve(rgb2gray(im), gaussian_filter(s0))
         self.s = s
         self.sigma = sigma
         self.num_octave = num_octave
         self.t_c = t_c
-        self.R_th = (r_th+1)**2 / r_th
+        self.R_th = (r_th + 1) ** 2 / r_th
         self.w = w
 
     def get_features(self):
