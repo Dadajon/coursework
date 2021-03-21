@@ -4,10 +4,10 @@ import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 
-original_image_right = cv2.imread('../assignment3/images/right.jpeg')
+original_image_right = cv2.imread('../assignment3/images/painting1.jpg')
 gray_img_right = cv2.cvtColor(original_image_right, cv2.COLOR_BGR2GRAY)
 
-original_image_left = cv2.imread('../assignment3/images/left.jpeg')
+original_image_left = cv2.imread('../assignment3/images/painting3.jpg')
 gray_img_left = cv2.cvtColor(original_image_left, cv2.COLOR_BGR2GRAY)
 
 sift = cv2.xfeatures2d.SIFT_create()
@@ -37,13 +37,12 @@ if len(matches[:, 0]) >= 4:
 else:
     raise AssertionError("Can't find enough keypoints.")
 
-dst = cv2.warpPerspective(original_image_right, H,
-                          (original_image_left.shape[1] + original_image_right.shape[1], original_image_left.shape[0]))
+dst = cv2.warpPerspective(original_image_right, H, (original_image_left.shape[1] + original_image_right.shape[1], original_image_left.shape[0]))
 plt.subplot(122), plt.imshow(dst), plt.title('Warped Image')
 plt.show()
 plt.figure()
 dst[0:original_image_left.shape[0], 0:original_image_left.shape[1]] = original_image_left
-cv2.imwrite('resultant_stitched_panorama.jpg', dst)
+cv2.imwrite('resultant_stitched_panorama_tower.jpg', dst)
 plt.imshow(dst)
 plt.show()
-cv2.imwrite('resultant_stitched_panorama.jpg', dst)
+cv2.imwrite('resultant_stitched_panorama_tower.jpg', dst)
